@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <cstring>
 
 using namespace std;
 
@@ -14,29 +16,27 @@ int main() {
 
     ChessBoard cb;
 
-    cb.print();
     cout << endl;
 
     cb.submitMove("D7", "D6");
     cout << endl;
-    /*
+    
     cb.submitMove("D4", "H6");
     cout << endl;
-
+    
     cb.submitMove("D2", "D4");
     cout << endl;
 
     cb.submitMove("F8", "B4");
     cout << endl;
-
+    
     cout << "===========================" << endl;
     cout << "Alekhine vs. Vasic (1931)" << endl;
     cout << "===========================" << endl;
     cout << endl;
-    */
-    // cb.resetBoard();
-    // cb.print();
-    /*cout << endl;
+    
+    cb.resetBoard();
+    cout << endl;
 
     cb.submitMove("E2", "E4");
     cb.submitMove("E7", "E6");
@@ -80,6 +80,6 @@ int main() {
 
     cb.submitMove("D3", "G6");
     cout << endl;
-    */
+        
     return 0;
 }

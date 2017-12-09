@@ -7,7 +7,7 @@ using namespace std;
 
 class Knight: public ChessPiece{
  public:
-  Knight(string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
+  Knight(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
   ~Knight();
   
 };

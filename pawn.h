@@ -7,7 +7,7 @@ using namespace std;
 
 class Pawn: public ChessPiece{
  public:
-  Pawn(string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
+  Pawn(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
   ~Pawn();
   
 };

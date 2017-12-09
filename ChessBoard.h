@@ -24,12 +24,15 @@ class ChessBoard{
   ChessPiece** white_chess_ptr;
   ChessPiece** chess_label_ptr;
   ChessPiece** index_label_ptr;
+  vector<ChessPiece*> captured_vec;
  public:
   ChessBoard();
   ~ChessBoard();
-  void submitMove(const char* source,const char* desti);
-  void execute_move(int s_rank,int s_file, int d_rank,int d_file);
+  bool submitMove(const char* source,const char* desti);
+  bool format_move(const char* source, const char* desti,int& s_rank,int& s_file, int& d_rank,int& d_file);
+  void execute_move(int s_rank,int s_file, int d_rank,int d_file,const char* source,const char* desti);
   void print();
+  bool check_source(int s_rank,int s_file,const char* source);
   void create_chess_pieces(char id);
   void initialize_board();
   void visualize_chess_label();
@@ -37,6 +40,7 @@ class ChessBoard{
   void resetBoard();
   string make_special_piece(char player_id,string& chess_id, int count);
   string make_pawn_piece(char player_id,string& pawn_id);
+  bool check_out_bound(int rank, int file);
 };
 
 

@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <vector>
+#include <cstring>
 
 #include "ChessBoard.h"
 #include "ChessPiece.h"
@@ -19,7 +21,7 @@ ChessBoard::ChessBoard(){
   white_chess_ptr = new ChessPiece* [CHESS_PIECE_NO];
   chess_label_ptr = new ChessPiece* [CHESS_PIECE_NO];
   index_label_ptr = new ChessPiece* [CHESS_PIECE_NO];
-
+  
   for (int i=0;i<RANK_SIZE+2; i++){
     for (int j=0;j<FILE_SIZE+2;j++){
       board_ptr[i][j] = NULL;
@@ -36,8 +38,8 @@ ChessBoard::ChessBoard(){
   create_chess_pieces('+');
   create_chess_pieces('-');
   initialize_board();
-
-  cout << "A new chess game is started!" << endl << endl;
+  print();
+  cout << "A new chess game is started!" << endl;
 }
 
 ChessBoard::~ChessBoard(){
@@ -59,19 +61,108 @@ ChessBoard::~ChessBoard(){
   delete [] board_ptr;
 }
 
-void ChessBoard::submitMove(const char* source, const char* desti){
-
+bool ChessBoard::submitMove(const char* source, const char* desti){
+  
+  turn_count++;
   int source_rank, source_file, desti_rank, desti_file;
-  source_file = source[0] - ASCII_ALP;
-  desti_file = desti[0] - ASCII_ALP;
-  source_rank = source[1] - ASCII_NO;
-  desti_rank = desti[1] - ASCII_NO;
 
-  execute_move(source_rank,source_file,desti_rank,desti_file);
+  if(!format_move(source,desti,source_rank,source_file,desti_rank,desti_file))
+    return false;
+  
+  if(!check_source(source_rank,source_file,source)){
+    return false;
+  }
+  execute_move(source_rank,source_file,desti_rank,desti_file,source,desti);
+  print();
+  return true;
+}
+
+bool ChessBoard::check_source(int s_rank,int s_file,const char* source){
+
+  if(board_ptr[s_rank][s_file]==NULL){
+    cerr << "There is no piece at position " << source <<"!" << endl;
+    return false;
+  }
+  if(turn_count%2==0){
+    if((board_ptr[s_rank][s_file]->get_chess_player())=="White"){
+      cerr << "It is not White's turn to move!" << endl;
+      return false;
+    }
+  }
+  if(turn_count%2==1){
+    if((board_ptr[s_rank][s_file]->get_chess_player())=="Black"){
+      cerr << "It is not Black's turn to move!" << endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+void ChessBoard::execute_move(int s_rank,int s_file, int d_rank,int d_file,const char* source,const char* desti){
+
+  ChessPiece* buff_desti = board_ptr[d_rank][d_file];
+  ChessPiece* buff_source =  board_ptr[s_rank][s_file];
+  
+  if(buff_desti==NULL){
+    
+    cout << buff_source->get_chess_player() << "'s " << buff_source->get_chess_name() << " moves from " << source << " to " << desti << endl;
+    
+    board_ptr[d_rank][d_file] = board_ptr[s_rank][s_file];;
+    board_ptr[s_rank][s_file] = NULL;
+  }
+  else{
+    
+    cout << buff_source->get_chess_player() << "'s " << buff_source->get_chess_name() << " moves from " << source << " to " << desti << " taking " << buff_desti->get_chess_player() << "'s "<< buff_desti->get_chess_name() << endl;
+    
+    captured_vec.push_back(board_ptr[d_rank][d_file]);
+    board_ptr[d_rank][d_file] = board_ptr[s_rank][s_file];
+    board_ptr[s_rank][s_file] = NULL;
+  } 
+}
+
+bool ChessBoard::format_move(const char* source, const char* desti,int& s_rank,int& s_file, int& d_rank,int& d_file){
+
+  int len_source = strlen(source);
+  int len_desti = strlen(desti);
+
+  if(len_source!=2){
+    cerr <<"The format of " <<source << " is wrong as a source square!" << endl;
+    return false;
+  }
+  if(len_desti!=2){
+    cerr <<"The format of " <<desti << " is wrong as a destination square!" << endl;
+    return false;
+  }
+  s_file = source[0] - ASCII_ALP;
+  d_file = desti[0] - ASCII_ALP;
+  int buff_s_rank = source[1] - ASCII_NO;
+  int buff_d_rank = desti[1] - ASCII_NO;
+  
+  if(!check_out_bound(buff_s_rank,s_file)){
+    cerr << source <<" is an invalid source square!" << endl;
+    return false;
+  }
+  if(!check_out_bound(buff_d_rank,d_file)){
+    cerr << desti <<" is an invalid destination square!" << endl;
+    return false;
+  }
+  int map_rank[8] = {8,7,6,5,4,3,2,1};
+  for(int i=0;i<8; i++){
+    if(buff_s_rank == map_rank[i])
+      s_rank = i+1;
+    if(buff_d_rank == map_rank[i])
+       d_rank = i+1;
+  }
+  return true;
 }
 
 void ChessBoard::print(){
 
+  for(auto iterator=captured_vec.begin();iterator!=captured_vec.end();iterator++){
+    if(*iterator!=NULL)
+      cout << **iterator << " ";
+    }cout << endl;
+  
   for (int i=0;i<RANK_SIZE+2;i++){
     for (int j=0;j<FILE_SIZE+2;j++){
       if(board_ptr[i][j]!=NULL){
@@ -99,6 +190,7 @@ void ChessBoard::create_chess_pieces(char id){
 
   ChessPiece** buffer_ptr;
   int rank_index,pawn_rank_index;
+  string chess_player;
   if (id == '+'){
      buffer_ptr = white_chess_ptr;
      rank_index = 8;
@@ -114,23 +206,25 @@ void ChessBoard::create_chess_pieces(char id){
   for (int i=0;i<RANK_SIZE;i++){
     chess_fig[i] = make_special_piece(id,chess_idd[i],i);
   }
-  buffer_ptr[0] = new Rook (chess_fig[0],chess_idd[0],rank_index,1,board_ptr);
-  buffer_ptr[1] = new Knight (chess_fig[1],chess_idd[1],rank_index,2,board_ptr);
-  buffer_ptr[2] = new Bishop (chess_fig[2],chess_idd[2],rank_index,3,board_ptr);
-  buffer_ptr[3] = new Queen (chess_fig[3],chess_idd[3],rank_index,4,board_ptr);
-  buffer_ptr[4] = new King (chess_fig[4],chess_idd[4],rank_index,5,board_ptr);
-  buffer_ptr[5] = new Bishop (chess_fig[5],chess_idd[5],rank_index,6,board_ptr);
-  buffer_ptr[6] = new Knight (chess_fig[6],chess_idd[6],rank_index,7,board_ptr);
-  buffer_ptr[7] = new Rook (chess_fig[7],chess_idd[7],rank_index,8,board_ptr);
+  
+  buffer_ptr[0] = new Rook ("Rook",chess_fig[0],chess_idd[0],rank_index,1,board_ptr);
+  buffer_ptr[1] = new Knight ("Knight",chess_fig[1],chess_idd[1],rank_index,2,board_ptr);
+  buffer_ptr[2] = new Bishop ("Bishop",chess_fig[2],chess_idd[2],rank_index,3,board_ptr);
+  buffer_ptr[3] = new Queen ("Queen",chess_fig[3],chess_idd[3],rank_index,4,board_ptr);
+  buffer_ptr[4] = new King ("King",chess_fig[4],chess_idd[4],rank_index,5,board_ptr);
+  buffer_ptr[5] = new Bishop ("Bishop",chess_fig[5],chess_idd[5],rank_index,6,board_ptr);
+  buffer_ptr[6] = new Knight ("Knight",chess_fig[6],chess_idd[6],rank_index,7,board_ptr);
+  buffer_ptr[7] = new Rook ("Rook",chess_fig[7],chess_idd[7],rank_index,8,board_ptr);
 
   string pawn_idd[8] = {"I","II","III","IV","V","VI","VII","VIII"};
   for (int i=0;i<RANK_SIZE;i++){
     string pawn_fig = make_pawn_piece(id,pawn_idd[i]);
-    buffer_ptr[i+8] = new Pawn(pawn_fig,pawn_idd[i],pawn_rank_index,i+1,board_ptr);
+    buffer_ptr[i+8] = new Pawn("Pawn",pawn_fig,pawn_idd[i],pawn_rank_index,i+1,board_ptr);
   }
 }
 
 void ChessBoard::initialize_board(){
+  
   for (int i=1;i< RANK_SIZE+1;i++){
     board_ptr[i][0] = index_label_ptr[i-1];
     board_ptr[i][FILE_SIZE+1] = chess_label_ptr[i-1];
@@ -140,18 +234,14 @@ void ChessBoard::initialize_board(){
     board_ptr[RANK_SIZE+1][j] = chess_label_ptr[j+FILE_SIZE-1];
   }
   for(int i=0;i<CHESS_PIECE_NO;i++){
-    if(white_chess_ptr[i]!=NULL){
-      int white_rank = white_chess_ptr[i]->get_init_rank();
-      int white_file = white_chess_ptr[i]->get_init_file();
-      board_ptr[white_rank][white_file] = white_chess_ptr[i];
-    }
+    int white_rank = white_chess_ptr[i]->get_init_rank();
+    int white_file = white_chess_ptr[i]->get_init_file();
+    board_ptr[white_rank][white_file] = white_chess_ptr[i];
   }
   for(int i=0;i<CHESS_PIECE_NO;i++){
-    if(black_chess_ptr[i]!=NULL){
-      int black_rank = black_chess_ptr[i]->get_init_rank();
-      int black_file = black_chess_ptr[i]->get_init_file();
-      board_ptr[black_rank][black_file] = black_chess_ptr[i];
-    }
+    int black_rank = black_chess_ptr[i]->get_init_rank();
+    int black_file = black_chess_ptr[i]->get_init_file();
+    board_ptr[black_rank][black_file] = black_chess_ptr[i];
   }
 }
 
@@ -161,13 +251,13 @@ void ChessBoard::visualize_chess_label(){
   for (int i=0;i<RANK_SIZE;i++){
     int index = count;
     string rank_label(1,index+ASCII_NO);
-    chess_label_ptr[i] = new ChessPiece(rank_label,rank_label,0,index,board_ptr);
+    chess_label_ptr[i] = new ChessPiece("Label",rank_label,rank_label,0,index,board_ptr);
     count--;
   }
   for (int i=RANK_SIZE;i<CHESS_PIECE_NO;i++){
     int index = i - RANK_SIZE + 1;
     string file_label(1,index+ASCII_ALP);
-    chess_label_ptr[i] = new ChessPiece(file_label,file_label,index,0,board_ptr);
+    chess_label_ptr[i] = new ChessPiece("Label",file_label,file_label,index,0,board_ptr);
   }
 }
 
@@ -176,17 +266,27 @@ void ChessBoard::visualize_index_label(){
   for (int i=0;i<RANK_SIZE;i++){
     int index = i+1;
     string rank_label(1,index+ASCII_NO);
-    index_label_ptr[i] = new ChessPiece(rank_label,rank_label,RANK_SIZE+1,index,board_ptr);
+    index_label_ptr[i] = new ChessPiece("Index",rank_label,rank_label,RANK_SIZE+1,index,board_ptr);
   }
   for (int i=RANK_SIZE;i<CHESS_PIECE_NO;i++){
     int index = i - RANK_SIZE + 1;
     string file_label(1,index+ASCII_NO);
-    index_label_ptr[i] = new ChessPiece(file_label,file_label,index,FILE_SIZE+1,board_ptr);
+    index_label_ptr[i] = new ChessPiece("Index",file_label,file_label,index,FILE_SIZE+1,board_ptr);
   }
 }
 
 void ChessBoard::resetBoard(){
+
+  for (int i=0;i<RANK_SIZE+2; i++){
+    for (int j=0;j<FILE_SIZE+2;j++){
+      board_ptr[i][j] = NULL;
+    }
+  }
+  for(auto iterator=captured_vec.begin();iterator!=captured_vec.end();iterator++){
+    *iterator = NULL;
+  }
   initialize_board();
+  print();
 }
 
 string ChessBoard::make_special_piece(char player_id, string& chess_id, int count){
@@ -220,4 +320,14 @@ string ChessBoard::make_pawn_piece(char player_id,string& pawn_id){
   pawn_fig+=buffer_fig;
   
   return pawn_fig;
+}
+
+bool ChessBoard::check_out_bound(int rank, int file){
+
+  if((rank<1)||(rank>8)){
+    return false;
+  }
+  if((file<1)||(file>8)){
+    return false;
+  }return true;
 }
