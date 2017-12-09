@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -12,7 +13,9 @@ int main() {
     cout << endl;
 
     ChessBoard cb;
-    cout << endl;
+
+    cb.print();
+    /*cout << endl;
 
     cb.submitMove("D7", "D6");
     cout << endl;
@@ -76,6 +79,6 @@ int main() {
 
     cb.submitMove("D3", "G6");
     cout << endl;
-
+    */
     return 0;
 }
