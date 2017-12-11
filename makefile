@@ -1,4 +1,4 @@
-OBJ = ChessMain.o ChessBoard.o ChessPiece.o king.o rook.o knight.o bishop.o queen.o pawn.o
+OBJ = ChessMain.o ChessBoard.o ChessPiece.o royal_infantry.o royal_rider.o king.o rook.o knight.o bishop.o queen.o pawn.o
 EXE = chess
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11
@@ -14,6 +14,10 @@ ChessMain.o: ChessBoard.h
 ChessBoard.o: ChessBoard.h
 
 ChessPiece.o: ChessPiece.h
+
+royal_infantry.o: royal_infantry.h
+
+royal_rider.o: royal_rider.h
 
 king.o: king.h
 

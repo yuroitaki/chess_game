@@ -40,7 +40,7 @@ bool ChessPiece::verify_desti(int d_rank,int d_file,const char* desti){
       return true;
     }
   }
-  cerr << chess_player << "'s " << chess_name << " cannot move to " << desti << endl;
+  cerr << chess_player << "'s " << chess_name << " cannot move to " << desti << "!"<<endl;
   return false;
 }
 
@@ -54,7 +54,7 @@ bool ChessPiece::check_friendly_fire(int d_rank,int d_file,const char* desti){
       return false;
     }
   }
-  unsigned count = 0;
+  int count = 0;
   while (count < possible_rank.size()){
     
     int buff_rank = possible_rank[count];
@@ -78,11 +78,11 @@ bool ChessPiece::check_friendly_fire(int d_rank,int d_file,const char* desti){
 
 void ChessPiece::check_move_bound(){
   
-  unsigned count=0;
+  int count=0;
   while(count<possible_rank.size()){
     int buff_rank = possible_rank[count];
     int buff_file = possible_file[count];
-    if((buff_rank<1)||(buff_rank>8)||(buff_file<1)||(buff_file>8)){
+    if(!check_rule_bound(buff_rank,buff_file)){
       possible_rank.erase(possible_rank.begin()+count);
       possible_file.erase(possible_file.begin()+count);
       count--;

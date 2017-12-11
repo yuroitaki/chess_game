@@ -4,7 +4,7 @@
 
 #include "rook.h"
 
-Rook::Rook(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){
+Rook::Rook(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):RoyalRider(name,fig,id,init_rank,init_file,bod_ptr){
 }
 
 Rook::~Rook(){
@@ -12,29 +12,22 @@ Rook::~Rook(){
 }
 
 bool Rook::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
-    
-  int r_top = current_rank - 1;
-  int r_mid = current_rank;
-  int r_low = current_rank + 1;
-  int f_left = current_file - 1;
-  int f_mid = current_file;
-  int f_right = current_file + 1;
+
+  vector<int> rank_move = {1,0,0,-1};
+  vector<int> file_move = {0,1,-1,0};
   
-  for(int i=0;i<3;i++){
-    possible_rank.push_back(r_top);
-    possible_rank.push_back(r_low);
-    possible_file.push_back(f_left);
-    if(i<2)
-      possible_rank.push_back(r_mid);
-  }
-  for(int i=0;i<3;i++){
-    possible_file.push_back(f_right);
-    if(i<2)
-      possible_file.push_back(f_mid);
-  }
+  chess_rule(rank_move,file_move);
   
-  ChessPiece::check_chess_move(source,desti,d_rank,d_file);
-  verify_desti(d_rank,d_file,desti);
+  if(!RoyalRider::check_chess_move(source,desti,d_rank,d_file)){
+    possible_rank.clear();
+    possible_file.clear();
+    return false;
+  }
+  if(!verify_desti(d_rank,d_file,desti)){
+    possible_rank.clear();
+    possible_file.clear();
+    return false;
+  }
   possible_rank.clear();
   possible_file.clear();
   return true;

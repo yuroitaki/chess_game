@@ -1,11 +1,11 @@
 #ifndef QUEEN_H
 #define QUEEN_H
 
-#include "ChessPiece.h"
+#include "royal_rider.h"
 
 using namespace std;
 
-class Queen: public ChessPiece{
+class Queen: public RoyalRider{
  public:
   Queen(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
   ~Queen();

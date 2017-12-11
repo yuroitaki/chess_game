@@ -1,11 +1,11 @@
 #ifndef BISHOP_H
 #define BISHOP_H
 
-#include "ChessPiece.h"
+#include "royal_rider.h"
 
 using namespace std;
 
-class Bishop: public ChessPiece{
+class Bishop: public RoyalRider{
  public:
   Bishop(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
   ~Bishop();

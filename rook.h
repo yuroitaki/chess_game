@@ -1,11 +1,11 @@
 #ifndef ROOK_H
 #define ROOK_H
 
-#include "ChessPiece.h"
+#include "royal_rider.h"
 
 using namespace std;
 
-class Rook: public ChessPiece{
+class Rook: public RoyalRider{
  public:
   Rook(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
   ~Rook();
