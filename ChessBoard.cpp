@@ -72,10 +72,14 @@ bool ChessBoard::submitMove(const char* source, const char* desti){
   if(!check_source(source_rank,source_file,source)){
     return false;
   }
+  if(!board_ptr[source_rank][source_file]->check_chess_move(source,desti,desti_rank,desti_file)){
+    return false;
+  }
   execute_move(source_rank,source_file,desti_rank,desti_file,source,desti);
   print();
   return true;
 }
+
 
 bool ChessBoard::check_source(int s_rank,int s_file,const char* source){
 
@@ -106,18 +110,19 @@ void ChessBoard::execute_move(int s_rank,int s_file, int d_rank,int d_file,const
   if(buff_desti==NULL){
     
     cout << buff_source->get_chess_player() << "'s " << buff_source->get_chess_name() << " moves from " << source << " to " << desti << endl;
-    
+
+    buff_source->set_position(d_rank,d_file);
     board_ptr[d_rank][d_file] = board_ptr[s_rank][s_file];;
     board_ptr[s_rank][s_file] = NULL;
   }
-  else{
-    
+  else{ 
     cout << buff_source->get_chess_player() << "'s " << buff_source->get_chess_name() << " moves from " << source << " to " << desti << " taking " << buff_desti->get_chess_player() << "'s "<< buff_desti->get_chess_name() << endl;
     
     captured_vec.push_back(board_ptr[d_rank][d_file]);
+    buff_source->set_position(d_rank,d_file);
     board_ptr[d_rank][d_file] = board_ptr[s_rank][s_file];
     board_ptr[s_rank][s_file] = NULL;
-  } 
+  }
 }
 
 bool ChessBoard::format_move(const char* source, const char* desti,int& s_rank,int& s_file, int& d_rank,int& d_file){
@@ -279,12 +284,19 @@ void ChessBoard::resetBoard(){
 
   for (int i=0;i<RANK_SIZE+2; i++){
     for (int j=0;j<FILE_SIZE+2;j++){
-      board_ptr[i][j] = NULL;
+      if(board_ptr[i][j] != NULL){
+	int buff_rank = board_ptr[i][j]->get_init_rank();
+	int buff_file = board_ptr[i][j]->get_init_file();
+	board_ptr[i][j]->set_position(buff_rank,buff_file);
+	board_ptr[i][j]->clear_vector();
+	board_ptr[i][j] = NULL;
+      }
     }
   }
   for(auto iterator=captured_vec.begin();iterator!=captured_vec.end();iterator++){
     *iterator = NULL;
   }
+  turn_count = 0;
   initialize_board();
   print();
 }
@@ -329,5 +341,5 @@ bool ChessBoard::check_out_bound(int rank, int file){
   }
   if((file<1)||(file>8)){
     return false;
-  }return true;
+  }return true; 
 }

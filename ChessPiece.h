@@ -15,16 +15,25 @@ class ChessPiece{
   string chess_player;
   int current_rank;
   int current_file;
+  vector<int> possible_rank;
+  vector<int> possible_file;
   ChessPiece*** board_ptr;
  public:
   ChessPiece(string name,string fig,string id,int init_rank, int init_file, ChessPiece*** bod_ptr);
   virtual ~ChessPiece();
+  virtual bool check_chess_move(const char* source, const char* desti,int d_rank,int d_file);
+  bool verify_desti(int d_rank,int d_file,const char* desti);
+  void check_move_bound();
+  bool check_friendly_fire(int d_rank,int d_file,const char* desti);
+  bool check_rule_bound(int rank, int file);
   friend ostream& operator<<(ostream& out,const ChessPiece& cp);
   int get_init_rank();
   int get_init_file();
   string get_chess_name();
   string get_chess_player();
   void set_player();
+  void set_position(int rank,int file);
+  void clear_vector();
 };
 
 

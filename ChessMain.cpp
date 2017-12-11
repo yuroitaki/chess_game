@@ -18,18 +18,21 @@ int main() {
 
     cout << endl;
 
-    cb.submitMove("D7", "D6");
+    cb.submitMove("H2", "H4");
+    cout << endl;
+        
+    cb.submitMove("G7", "G5");
     cout << endl;
     
-    cb.submitMove("D4", "H6");
-    cout << endl;
-    
-    cb.submitMove("D2", "D4");
+    cb.submitMove("F2", "F4");
     cout << endl;
 
-    cb.submitMove("F8", "B4");
+    cb.submitMove("G5", "G4");
     cout << endl;
-    
+
+    cb.submitMove("F4", "F5");
+    cout << endl;
+      
     cout << "===========================" << endl;
     cout << "Alekhine vs. Vasic (1931)" << endl;
     cout << "===========================" << endl;
@@ -38,14 +41,14 @@ int main() {
     cb.resetBoard();
     cout << endl;
 
-    cb.submitMove("E2", "E4");
-    cb.submitMove("E7", "E6");
+    cb.submitMove("G1", "H3");
+    cb.submitMove("B8", "A6");
     cout << endl;
-
-    cb.submitMove("D2", "D4");
-    cb.submitMove("D7", "D5");
+    
+    cb.submitMove("H2", "H4");
+    cb.submitMove("B7", "B6");
     cout << endl;
-
+    /*    
     cb.submitMove("B1", "C3");
     cb.submitMove("F8", "B4");
     cout << endl;
@@ -80,6 +83,6 @@ int main() {
 
     cb.submitMove("D3", "G6");
     cout << endl;
-        
+    */
     return 0;
 }

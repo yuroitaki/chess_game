@@ -16,11 +16,91 @@ ChessPiece::ChessPiece(string name, string fig,string id,int init_rank, int init
   current_rank = init_rank;
   current_file = init_file;
   board_ptr = bod_ptr;;
-
   set_player();
 }
 
 ChessPiece::~ChessPiece(){
+}
+
+bool ChessPiece::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
+  
+  check_move_bound();
+  
+  if(!check_friendly_fire(d_rank,d_file,desti)){
+    return false;
+  }
+  return true;
+}
+
+
+bool ChessPiece::verify_desti(int d_rank,int d_file,const char* desti){
+  
+  for(unsigned i=0;i<possible_rank.size();i++){
+    if((d_rank==possible_rank[i])&&(d_file==possible_file[i])){
+      return true;
+    }
+  }
+  cerr << chess_player << "'s " << chess_name << " cannot move to " << desti << endl;
+  return false;
+}
+
+
+bool ChessPiece::check_friendly_fire(int d_rank,int d_file,const char* desti){
+
+  ChessPiece* buff_d_ptr = board_ptr[d_rank][d_file]; 
+  if (buff_d_ptr!=NULL){
+    if(buff_d_ptr->get_chess_player()==chess_player){
+      cerr << buff_d_ptr->get_chess_name() << " at " << desti << " is also " << chess_player << "'s!" << endl;
+      return false;
+    }
+  }
+  unsigned count = 0;
+  while (count < possible_rank.size()){
+    
+    int buff_rank = possible_rank[count];
+    int buff_file = possible_file[count];
+    ChessPiece* buff_test_ptr = board_ptr[buff_rank][buff_file];
+    
+    if(buff_test_ptr!=NULL){
+      if(buff_test_ptr->get_chess_player()==chess_player){
+	possible_rank.erase(possible_rank.begin()+count);
+	possible_file.erase(possible_file.begin()+count);
+	count--;
+      }
+    }count++;
+  }
+  for(unsigned i=0;i<possible_rank.size();i++){
+    cout << possible_rank[i] << " " << possible_file[i] << endl;
+  }cout << endl;
+  
+  return true;
+}
+
+void ChessPiece::check_move_bound(){
+  
+  unsigned count=0;
+  while(count<possible_rank.size()){
+    int buff_rank = possible_rank[count];
+    int buff_file = possible_file[count];
+    if((buff_rank<1)||(buff_rank>8)||(buff_file<1)||(buff_file>8)){
+      possible_rank.erase(possible_rank.begin()+count);
+      possible_file.erase(possible_file.begin()+count);
+      count--;
+    }count++;
+  }
+  for(unsigned i=0;i<possible_rank.size();i++){
+    cout << possible_rank[i] << " " << possible_file[i] << endl;
+  }cout << endl << endl;
+}
+
+bool ChessPiece::check_rule_bound(int rank, int file){
+  
+  if((rank<1)||(rank>8)){
+    return false;
+  }
+  if((file<1)||(file>8)){
+    return false;
+  }return true; 
 }
 
 ostream& operator<<(ostream& out, const ChessPiece& cp){
@@ -47,4 +127,14 @@ void ChessPiece::set_player(){
     chess_player = "White";
   if(initial_rank<3)
     chess_player = "Black";
+}
+
+void ChessPiece::set_position(int rank, int file){
+  current_rank = rank;
+  current_file = file;
+}
+
+void ChessPiece::clear_vector(){
+  possible_rank.clear();
+  possible_file.clear();
 }
