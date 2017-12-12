@@ -5,7 +5,7 @@
 
 #include "rook.h"
 
-Rook::Rook(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):RoyalRider(name,fig,id,init_rank,init_file,bod_ptr){}
+Rook::Rook(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr,ChessBoard* chess_b_ptr):RoyalRider(name,fig,id,init_rank,init_file,bod_ptr,chess_b_ptr){}
 
 Rook::~Rook(){}
 

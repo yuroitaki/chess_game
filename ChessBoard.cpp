@@ -11,6 +11,7 @@ using namespace std;
 ChessBoard::ChessBoard(){
 
   turn_count = 0;
+  check_status = NOT_CHECKED;
   
   board_ptr = new ChessPiece**[RANK_SIZE+2];
   for(int i=0;i<RANK_SIZE+2;i++){
@@ -108,6 +109,7 @@ bool ChessBoard::check_state(int d_rank,int d_file){
   if(check_mate(atk_ptr,king_rank,king_file)){
     if(save_king(def_ptr,atk_ptr,king_rank,king_file)){
       cout << def_name << " is in check" <<endl;
+      check_status = CHECKED;
       return false;
     }
     cout << def_name << " is in checkmate" << endl;
@@ -117,6 +119,7 @@ bool ChessBoard::check_state(int d_rank,int d_file){
     cout << def_name << " is in stalemate" << endl;
     return true;
   }
+  check_status = NOT_CHECKED;
   return false;
 }
 
@@ -334,19 +337,19 @@ void ChessBoard::create_chess_pieces(char id){
     chess_fig[i] = make_special_piece(id,chess_idd[i],i);
   }
   
-  buffer_ptr[0] = new Rook ("Rook",chess_fig[0],chess_idd[0],rank_index,1,board_ptr);
-  buffer_ptr[1] = new Knight ("Knight",chess_fig[1],chess_idd[1],rank_index,2,board_ptr);
-  buffer_ptr[2] = new Bishop ("Bishop",chess_fig[2],chess_idd[2],rank_index,3,board_ptr);
-  buffer_ptr[3] = new Queen ("Queen",chess_fig[3],chess_idd[3],rank_index,4,board_ptr);
-  buffer_ptr[4] = new King ("King",chess_fig[4],chess_idd[4],rank_index,5,board_ptr);
-  buffer_ptr[5] = new Bishop ("Bishop",chess_fig[5],chess_idd[5],rank_index,6,board_ptr);
-  buffer_ptr[6] = new Knight ("Knight",chess_fig[6],chess_idd[6],rank_index,7,board_ptr);
-  buffer_ptr[7] = new Rook ("Rook",chess_fig[7],chess_idd[7],rank_index,8,board_ptr);
+  buffer_ptr[0] = new Rook ("Rook",chess_fig[0],chess_idd[0],rank_index,1,board_ptr,this);
+  buffer_ptr[1] = new Knight ("Knight",chess_fig[1],chess_idd[1],rank_index,2,board_ptr,this);
+  buffer_ptr[2] = new Bishop ("Bishop",chess_fig[2],chess_idd[2],rank_index,3,board_ptr,this);
+  buffer_ptr[3] = new Queen ("Queen",chess_fig[3],chess_idd[3],rank_index,4,board_ptr,this);
+  buffer_ptr[4] = new King ("King",chess_fig[4],chess_idd[4],rank_index,5,board_ptr,this);
+  buffer_ptr[5] = new Bishop ("Bishop",chess_fig[5],chess_idd[5],rank_index,6,board_ptr,this);
+  buffer_ptr[6] = new Knight ("Knight",chess_fig[6],chess_idd[6],rank_index,7,board_ptr,this);
+  buffer_ptr[7] = new Rook ("Rook",chess_fig[7],chess_idd[7],rank_index,8,board_ptr,this);
 
   string pawn_idd[8] = {"I","II","III","IV","V","VI","VII","VIII"};
   for (int i=0;i<RANK_SIZE;i++){
     string pawn_fig = make_pawn_piece(id,pawn_idd[i]);
-    buffer_ptr[i+8] = new Pawn("Pawn",pawn_fig,pawn_idd[i],pawn_rank_index,i+1,board_ptr);
+    buffer_ptr[i+8] = new Pawn("Pawn",pawn_fig,pawn_idd[i],pawn_rank_index,i+1,board_ptr,this);
   }
 }
 
@@ -378,13 +381,13 @@ void ChessBoard::visualize_chess_label(){
   for (int i=0;i<RANK_SIZE;i++){
     int index = count;
     string rank_label(1,index+ASCII_NO);
-    chess_label_ptr[i] = new ChessPiece("Label",rank_label,rank_label,0,index,board_ptr);
+    chess_label_ptr[i] = new ChessPiece("Label",rank_label,rank_label,0,index,board_ptr,this);
     count--;
   }
   for (int i=RANK_SIZE;i<CHESS_PIECE_NO;i++){
     int index = i - RANK_SIZE + 1;
     string file_label(1,index+ASCII_ALP);
-    chess_label_ptr[i] = new ChessPiece("Label",file_label,file_label,index,0,board_ptr);
+    chess_label_ptr[i] = new ChessPiece("Label",file_label,file_label,index,0,board_ptr,this);
   }
 }
 
@@ -393,12 +396,12 @@ void ChessBoard::visualize_index_label(){
   for (int i=0;i<RANK_SIZE;i++){
     int index = i+1;
     string rank_label(1,index+ASCII_NO);
-    index_label_ptr[i] = new ChessPiece("Index",rank_label,rank_label,RANK_SIZE+1,index,board_ptr);
+    index_label_ptr[i] = new ChessPiece("Index",rank_label,rank_label,RANK_SIZE+1,index,board_ptr,this);
   }
   for (int i=RANK_SIZE;i<CHESS_PIECE_NO;i++){
     int index = i - RANK_SIZE + 1;
     string file_label(1,index+ASCII_NO);
-    index_label_ptr[i] = new ChessPiece("Index",file_label,file_label,index,FILE_SIZE+1,board_ptr);
+    index_label_ptr[i] = new ChessPiece("Index",file_label,file_label,index,FILE_SIZE+1,board_ptr,this);
   }
 }
 
@@ -465,4 +468,20 @@ bool ChessBoard::check_out_bound(int rank, int file){
   if((file<1)||(file>8)){
     return false;
   }return true; 
+}
+
+ChessPiece** ChessBoard::get_chess_ptr(int signal){
+  
+  if(signal==WHITE){
+    return white_chess_ptr;
+  }
+  if(signal==BLACK){
+    return black_chess_ptr;
+  }
+  return white_chess_ptr;
+}
+
+
+int ChessBoard::get_check_status(){
+  return check_status;
 }

@@ -5,7 +5,7 @@
 
 #include "royal_infantry.h"
 
-RoyalInfantry::RoyalInfantry(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){}
+RoyalInfantry::RoyalInfantry(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr,ChessBoard* chess_b_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr,chess_b_ptr){}
 
 RoyalInfantry::~RoyalInfantry(){}
 

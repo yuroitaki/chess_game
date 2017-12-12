@@ -1,6 +1,10 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
+#define BLACK 0
+#define WHITE 1
+#define CHECKED 10
+#define NOT_CHECKED 100
 #define KING_POS 4
 #define RANK_SIZE 8
 #define FILE_SIZE 8
@@ -28,6 +32,7 @@ class ChessBoard{
   ChessPiece** chess_label_ptr;
   ChessPiece** index_label_ptr;
   vector<ChessPiece*> captured_vec;
+  int check_status;
  public:
   ChessBoard();
   ~ChessBoard();
@@ -48,6 +53,8 @@ class ChessBoard{
   string make_special_piece(char player_id,string& chess_id, int count);
   string make_pawn_piece(char player_id,string& pawn_id);
   bool check_out_bound(int rank, int file);
+  ChessPiece** get_chess_ptr(int signal);
+  int get_check_status();
 };
 
 

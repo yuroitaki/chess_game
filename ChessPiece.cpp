@@ -8,7 +8,7 @@
 
 using namespace std;
 
-ChessPiece::ChessPiece(string name, string fig,string id,int init_rank, int init_file, ChessPiece*** bod_ptr){
+ChessPiece::ChessPiece(string name, string fig,string id,int init_rank, int init_file, ChessPiece*** bod_ptr,ChessBoard* chess_b_ptr){
   chess_name = name;
   chess_fig = fig;
   chess_id = id;
@@ -17,6 +17,7 @@ ChessPiece::ChessPiece(string name, string fig,string id,int init_rank, int init
   current_rank = init_rank;
   current_file = init_file;
   board_ptr = bod_ptr;;
+  chessboard_ptr = chess_b_ptr;
   set_player();
 }
 

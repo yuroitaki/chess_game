@@ -7,7 +7,7 @@ using namespace std;
 
 class RoyalRider: public ChessPiece{
  public:
-  RoyalRider(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
+  RoyalRider(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr,ChessBoard* chess_b_ptr);
   ~RoyalRider();
   bool check_chess_move(const char* source, const char* desti,int d_rank,int d_file);
   void chess_rule(vector<int>& rank_vec, vector<int>& file_vec);

@@ -5,7 +5,7 @@
 
 #include "knight.h"
 
-Knight::Knight(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):RoyalInfantry(name,fig,id,init_rank,init_file,bod_ptr){}
+Knight::Knight(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr,ChessBoard* chess_b_ptr):RoyalInfantry(name,fig,id,init_rank,init_file,bod_ptr,chess_b_ptr){}
 
  Knight::~Knight(){}
 
