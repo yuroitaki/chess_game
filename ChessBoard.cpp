@@ -88,23 +88,76 @@ bool ChessBoard::submitMove(const char* source, const char* desti){
 
 bool ChessBoard::check_state(int d_rank,int d_file){
 
-  string player_name = board_ptr[d_rank][d_file]->get_chess_player();
-  ChessPiece** att_ptr;
-  ChessPiece** opp_ptr;
-  if(player_name=="White"){
-    att_ptr = white_chess_ptr;
-    opp_ptr = black_chess_ptr;
+  string atk_name = board_ptr[d_rank][d_file]->get_chess_player();
+  string def_name;
+  ChessPiece** atk_ptr;
+  ChessPiece** def_ptr;
+  if(atk_name=="White"){
+    atk_ptr = white_chess_ptr;
+    def_ptr = black_chess_ptr;
+    def_name = "Black";
   }
-  if (player_name == "Black"){
-    att_ptr = black_chess_ptr;
-    opp_ptr = white_chess_ptr;
+  if(atk_name == "Black"){
+    atk_ptr = black_chess_ptr;
+    def_ptr = white_chess_ptr;
+    def_name = "White";
   }
-  int def_rank = opp_ptr[KING_POS]->get_curr_rank();
-  int def_file = opp_ptr[KING_POS]->get_curr_file();
+  int def_rank = def_ptr[KING_POS]->get_curr_rank();
+  int def_file = def_ptr[KING_POS]->get_curr_file();
   
-  check_mate(att_ptr,def_rank,def_file);
+  if(check_mate(atk_ptr,def_rank,def_file)){
+    if(save_king(def_ptr,atk_ptr,def_rank,def_file)){
+      cout << def_name << " is in check" <<endl;
+      return false;
+    }
+    cout << def_name << " is in checkmate" << endl;
+    return true;
+  }
+  return false;
+}
+
+bool ChessBoard::save_king(ChessPiece** def_ptr, ChessPiece** atk_ptr,int def_rank,int def_file){
+  vector<int>* def_rvec;
+  vector<int>* def_fvec;
+  int count = 0;
+  int ori_king_rank = def_rank;
+  int ori_king_file = def_file;
   
-  return true;
+  while(count<CHESS_PIECE_NO){
+    if(check_life_stat(def_ptr[count])){
+      
+      def_ptr[count]->build_possible_moves();
+      def_rvec = def_ptr[count]->get_rank_vec();
+      def_fvec = def_ptr[count]->get_file_vec();
+      
+      for(unsigned j=0; j<(def_rvec->size());j++){
+
+	int buff_rank = (*def_rvec)[j];
+	int buff_file = (*def_fvec)[j];
+	ChessPiece* buff_ptr = board_ptr[buff_rank][buff_file];
+	
+	board_ptr[buff_rank][buff_file] = def_ptr[count];
+
+	if(count == KING_POS){
+	  def_rank = buff_rank;
+	  def_file = buff_file;
+	}
+	else{
+	  def_rank = ori_king_rank;
+	  def_file = ori_king_file;
+	}
+	
+	if(!check_mate(atk_ptr,def_rank,def_file)){
+	  // cout << endl << endl;
+	  // cout<< def_ptr[count]->get_curr_rank() <<" " << def_ptr[count]->get_curr_file() <<" " << *(def_ptr[count])<< " "<< buff_rank << " " << buff_file << endl;
+	  def_ptr[count]->clear_vector();
+	  board_ptr[buff_rank][buff_file] = buff_ptr;
+	  return true;
+	}
+	board_ptr[buff_rank][buff_file] = buff_ptr;
+      }def_ptr[count]->clear_vector();
+    }count++;
+  }return false;
 }
 
 bool ChessBoard::check_mate(ChessPiece** atck_ptr,int def_rank,int def_file){
@@ -122,6 +175,7 @@ bool ChessBoard::check_mate(ChessPiece** atck_ptr,int def_rank,int def_file){
     
       for(unsigned j=0; j<(atck_rank->size());j++){
 	if((def_rank == (*atck_rank)[j])&&(def_file == (*atck_file)[j])){
+	  // cout<< atck_ptr[count]->get_curr_rank() <<" " << atck_ptr[count]->get_curr_file() << " " << *(atck_ptr[count]) <<endl;
 	  atck_ptr[count]->clear_vector();
 	  return true;
 	}

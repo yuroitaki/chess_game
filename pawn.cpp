@@ -45,14 +45,14 @@ void Pawn::chess_rule(){
   
   vector<int> buff_rank_vec;
   vector<int> buff_file_vec;
-  buff_rank_vec.push_back(temp_rank[0]);
-  buff_file_vec.push_back(pawn_file[0]);
 
   int leap_rank = current_rank + temp_rank[0];
   int leap_file = current_file + pawn_file[0];
   
   if(check_rule_bound(leap_rank,leap_file)){
     if(board_ptr[leap_rank][leap_file]==NULL){
+      buff_rank_vec.push_back(temp_rank[0]);
+      buff_file_vec.push_back(pawn_file[0]);
       if((current_rank==initial_rank)&&(current_file==initial_file)){
 	buff_rank_vec.push_back(temp_rank[1]);
 	buff_file_vec.push_back(pawn_file[1]);

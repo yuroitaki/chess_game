@@ -35,10 +35,10 @@ class ChessPiece{
   int get_init_file();
   int get_curr_rank();
   int get_curr_file();
+  string get_chess_player();
   vector<int>* get_rank_vec();
   vector<int>* get_file_vec();
   string get_chess_name();
-  string get_chess_player();
   void set_player();
   void set_position(int rank,int file);
   void clear_vector();
