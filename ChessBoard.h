@@ -8,6 +8,8 @@
 #define ASCII_NO 48
 #define ASCII_ALP 64
 
+#include <vector>
+
 #include "king.h"
 #include "rook.h"
 #include "knight.h"

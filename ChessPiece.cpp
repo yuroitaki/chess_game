@@ -57,8 +57,10 @@ bool ChessPiece::check_desti_friendly_fire(int d_rank,int d_file,const char* des
 }
 
 void ChessPiece::check_friendly_fire(){
+  
   int count = 0;
-  while (count < possible_rank.size()){
+  int len = possible_rank.size();
+  while (count < len){
     
     int buff_rank = possible_rank[count];
     int buff_file = possible_file[count];
@@ -71,13 +73,15 @@ void ChessPiece::check_friendly_fire(){
 	count--;
       }
     }count++;
+    len = possible_rank.size();
   }
 }
 
 void ChessPiece::check_move_bound(){
   
-  int count=0;
-  while(count<possible_rank.size()){
+  int count = 0;
+  int len = possible_rank.size();
+  while(count < len){
     int buff_rank = possible_rank[count];
     int buff_file = possible_file[count];
     if(!check_rule_bound(buff_rank,buff_file)){
@@ -85,6 +89,7 @@ void ChessPiece::check_move_bound(){
       possible_file.erase(possible_file.begin()+count);
       count--;
     }count++;
+    len = possible_rank.size();
   }
 }
 
