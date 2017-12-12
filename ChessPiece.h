@@ -1,6 +1,8 @@
 #ifndef CHESSPIECE_H 
 #define CHESSPIECE_H
 
+#include<vector>
+
 using namespace std; 
 
 class ChessBoard;
