@@ -78,10 +78,10 @@ bool ChessBoard::submitMove(const char* source, const char* desti){
   execute_move(source_rank,source_file,desti_rank,desti_file,source,desti);
   
   if(check_state(desti_rank,desti_file)){
-    print();
+    //print();
     return false;
   }
-  print();
+  //print();
   return true;
 }
 
