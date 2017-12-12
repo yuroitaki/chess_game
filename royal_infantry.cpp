@@ -5,6 +5,8 @@
 
 #include "royal_infantry.h"
 
+/*a derived class of ChessPiece, and a superclass of Knight and King */
+
 RoyalInfantry::RoyalInfantry(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr,ChessBoard* chess_b_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr,chess_b_ptr){}
 
 RoyalInfantry::~RoyalInfantry(){}
@@ -18,6 +20,7 @@ bool RoyalInfantry::check_chess_move(const char* source, const char* desti,int d
   return true;
 }
 
+/* construct the possible square space based on specified rules */
 void RoyalInfantry::chess_rule(int* buff_rank_arr, int* buff_file_arr)
 {
   int len_arr = 8;

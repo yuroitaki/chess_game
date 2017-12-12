@@ -12,7 +12,7 @@ Knight::Knight(string name,string fig,string id,int init_rank,int init_file,Ches
 bool Knight::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
    
   int len_arr = 8;
-  int buff_rank_arr[len_arr] = {-2,-1,1,2,-2,-1,1,2};
+  int buff_rank_arr[len_arr] = {-2,-1,1,2,-2,-1,1,2};     //basic moves
   int buff_file_arr[len_arr] = {-1,-2,-2,-1,1,2,2,1};
   int* rank_ptr = buff_rank_arr;
   int* file_ptr = buff_file_arr;

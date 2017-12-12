@@ -11,7 +11,7 @@ Rook::~Rook(){}
 
 bool Rook::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
 
-  vector<int> rank_move = {1,0,0,-1};
+  vector<int> rank_move = {1,0,0,-1};     //basic moves
   vector<int> file_move = {0,1,-1,0};
   
   chess_rule(rank_move,file_move);

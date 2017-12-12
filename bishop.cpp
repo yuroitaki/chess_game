@@ -11,7 +11,7 @@ Bishop::~Bishop(){}
 
 bool Bishop::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
 
-  vector<int> rank_move = {1,-1,1,-1};
+  vector<int> rank_move = {1,-1,1,-1};      //basic moves
   vector<int> file_move = {1,1,-1,-1};
 
   chess_rule(rank_move,file_move);

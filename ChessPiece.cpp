@@ -16,24 +16,25 @@ ChessPiece::ChessPiece(string name, string fig,string id,int init_rank, int init
   initial_file = init_file;
   current_rank = init_rank;
   current_file = init_file;
-  board_ptr = bod_ptr;;
-  chessboard_ptr = chess_b_ptr;
+  board_ptr = bod_ptr;           //pointer to the chess board
+  chessboard_ptr = chess_b_ptr;  //pointer to ChessBoard class
   set_player();
 }
 
 ChessPiece::~ChessPiece(){}
 
+/* virtual function to construct possible square space and check if input desti is valid */
 bool ChessPiece::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
    
   if(!check_desti_friendly_fire(d_rank,d_file,desti,source)){
     return false;
   }
-  check_move_bound();
+  check_move_bound();   
   check_friendly_fire();
   return true;
 }
 
-
+/* to check if input destination is within the possible square space of the piece */
 bool ChessPiece::verify_desti(int d_rank,int d_file,const char* desti){
   
   for(unsigned i=0;i<possible_rank.size();i++){
@@ -45,7 +46,7 @@ bool ChessPiece::verify_desti(int d_rank,int d_file,const char* desti){
   return false;
 }
 
-
+/* check if the input destination contains a chess piece of the same kind */
 bool ChessPiece::check_desti_friendly_fire(int d_rank,int d_file,const char* desti, const char* source){
 
   ChessPiece* buff_d_ptr = board_ptr[d_rank][d_file]; 
@@ -57,6 +58,7 @@ bool ChessPiece::check_desti_friendly_fire(int d_rank,int d_file,const char* des
   }return true;
 }
 
+/* remove 'friendly fire' square from the possible square space */
 void ChessPiece::check_friendly_fire(){
   
   int count = 0;
@@ -78,13 +80,16 @@ void ChessPiece::check_friendly_fire(){
   }
 }
 
+/* remove square that is out of bound from the possible square space*/
 void ChessPiece::check_move_bound(){
   
   int count = 0;
   int len = possible_rank.size();
+  
   while(count < len){
     int buff_rank = possible_rank[count];
     int buff_file = possible_file[count];
+    
     if(!check_rule_bound(buff_rank,buff_file)){
       possible_rank.erase(possible_rank.begin()+count);
       possible_file.erase(possible_file.begin()+count);
@@ -94,11 +99,11 @@ void ChessPiece::check_move_bound(){
   }
 }
 
+/* virtual function to find a possible square that can stop checkmate */
 void ChessPiece::build_possible_moves(){
   check_move_bound();
   check_friendly_fire();
 }
-
 
 bool ChessPiece::check_rule_bound(int rank, int file){
   
@@ -123,7 +128,6 @@ int ChessPiece::get_init_file(){
   return initial_file;
 }
 
-
 int ChessPiece::get_curr_rank(){
   return current_rank;
 }
@@ -135,14 +139,14 @@ int ChessPiece::get_curr_file(){
 vector<int>* ChessPiece::get_rank_vec(){
   
   vector<int>* rank_ptr;
-  rank_ptr = &possible_rank;
+  rank_ptr = &possible_rank;     // possible square space (rank)
   return rank_ptr;
 }
 
 vector<int>* ChessPiece::get_file_vec(){
 
   vector<int>* file_ptr;
-  file_ptr = &possible_file;
+  file_ptr = &possible_file;     // possible square space (file)
   return file_ptr;
 }
 
@@ -165,7 +169,8 @@ void ChessPiece::set_position(int rank, int file){
   current_file = file;
 }
 
+/* neccesary to clear the possible square space after every construction */
 void ChessPiece::clear_vector(){
-  possible_rank.clear();
+  possible_rank.clear();           
   possible_file.clear();
 }
