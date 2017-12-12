@@ -8,7 +8,7 @@ RoyalRider::RoyalRider(string name,string fig,string id,int init_rank,int init_f
 }
 
 RoyalRider::~RoyalRider(){
-  cout << "RoyalRider is deleted!" << " ";
+ 
 }
 
 bool RoyalRider::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){

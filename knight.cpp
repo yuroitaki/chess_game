@@ -7,8 +7,8 @@
 Knight::Knight(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):RoyalInfantry(name,fig,id,init_rank,init_file,bod_ptr){
 }
 
-Knight::~Knight(){
-  cout << "Knight is deleted!" << " ";
+ Knight::~Knight(){
+
 }
 
 bool Knight::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){

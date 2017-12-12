@@ -8,7 +8,7 @@ King::King(string name,string fig,string id,int init_rank,int init_file,ChessPie
 }
 
 King::~King(){
-  cout << "King is deleted!" << " ";
+
 }
 
 bool King::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){

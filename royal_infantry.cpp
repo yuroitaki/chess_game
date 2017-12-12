@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -8,7 +9,7 @@ RoyalInfantry::RoyalInfantry(string name,string fig,string id,int init_rank,int 
 }
 
 RoyalInfantry::~RoyalInfantry(){
-  cout << "Royal Infantry is deleted!" << " ";
+
 }
 
 bool RoyalInfantry::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){ 

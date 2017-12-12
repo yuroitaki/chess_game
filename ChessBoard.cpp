@@ -38,7 +38,7 @@ ChessBoard::ChessBoard(){
   create_chess_pieces('+');
   create_chess_pieces('-');
   initialize_board();
-  print();
+  //print();
   cout << "A new chess game is started!" << endl;
 }
 
@@ -122,8 +122,6 @@ bool ChessBoard::check_mate(ChessPiece** atck_ptr,int def_rank,int def_file){
     
       for(unsigned j=0; j<(atck_rank->size());j++){
 	if((def_rank == (*atck_rank)[j])&&(def_file == (*atck_file)[j])){
-	  
-	  cout << *(atck_ptr[count]) << endl;
 	  atck_ptr[count]->clear_vector();
 	  return true;
 	}
@@ -362,7 +360,8 @@ void ChessBoard::resetBoard(){
   }
   turn_count = 0;
   initialize_board();
-  print();
+  //print();
+  cout << "A new chess game is started!" << endl;
 }
 
 string ChessBoard::make_special_piece(char player_id, string& chess_id, int count){

@@ -8,7 +8,6 @@ Bishop::Bishop(string name,string fig,string id,int init_rank,int init_file,Ches
 }
 
 Bishop::~Bishop(){
-  cout << "Bishop is deleted!" << " ";
 }
 
 bool Bishop::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){

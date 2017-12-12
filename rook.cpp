@@ -8,7 +8,6 @@ Rook::Rook(string name,string fig,string id,int init_rank,int init_file,ChessPie
 }
 
 Rook::~Rook(){
-  cout << "Rook is deleted!" << " ";
 }
 
 bool Rook::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){

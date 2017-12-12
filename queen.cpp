@@ -8,7 +8,7 @@ Queen::Queen(string name,string fig,string id,int init_rank,int init_file,ChessP
 }
 
 Queen::~Queen(){
-  cout << "Queen is deleted!" << " ";
+
 }
 
 bool Queen::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
