@@ -1,15 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "pawn.h"
 
-Pawn::Pawn(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){
-}
+Pawn::Pawn(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){}
 
-Pawn::~Pawn(){
-
-}
+Pawn::~Pawn(){}
 
 bool Pawn::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
 
@@ -51,8 +49,10 @@ void Pawn::chess_rule(){
   
   if(check_rule_bound(leap_rank,leap_file)){
     if(board_ptr[leap_rank][leap_file]==NULL){
+      
       buff_rank_vec.push_back(temp_rank[0]);
       buff_file_vec.push_back(pawn_file[0]);
+      
       if((current_rank==initial_rank)&&(current_file==initial_file)){
 	buff_rank_vec.push_back(temp_rank[1]);
 	buff_file_vec.push_back(pawn_file[1]);
@@ -66,6 +66,7 @@ void Pawn::chess_rule(){
     if(check_rule_bound(buf_rank,buf_file)){
       if(board_ptr[buf_rank][buf_file]!=NULL){
 	if(board_ptr[buf_rank][buf_file]->get_chess_player()!=chess_player){
+	  
 	  buff_rank_vec.push_back(temp_rank[i+2]);
 	  buff_file_vec.push_back(pawn_file[i+2]);
 	}
@@ -78,17 +79,11 @@ void Pawn::chess_rule(){
     possible_rank.push_back(buff_rank);
     possible_file.push_back(buff_file);
   }    
-  // for(unsigned i=0;i<possible_rank.size();i++){
-  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
-  // }cout << chess_id << endl;
-  // cout << endl; 
 }
 
 void Pawn::build_possible_moves(){
   
   chess_rule();
-  check_move_bound();
-  check_friendly_fire();
-
+  ChessPiece::build_possible_moves();
 }
 

@@ -1,8 +1,6 @@
 #ifndef CHESSPIECE_H 
 #define CHESSPIECE_H
 
-#include<vector>
-
 using namespace std; 
 
 class ChessBoard;
@@ -27,7 +25,7 @@ class ChessPiece{
   virtual void build_possible_moves();
   bool verify_desti(int d_rank,int d_file,const char* desti);
   void check_move_bound();
-  bool check_desti_friendly_fire(int d_rank,int d_file,const char* desti);
+  bool check_desti_friendly_fire(int d_rank,int d_file,const char* desti,const char* source);
   void check_friendly_fire();
   bool check_rule_bound(int rank, int file);
   friend ostream& operator<<(ostream& out,const ChessPiece& cp);

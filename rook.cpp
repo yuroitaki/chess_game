@@ -1,14 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "rook.h"
 
-Rook::Rook(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):RoyalRider(name,fig,id,init_rank,init_file,bod_ptr){
-}
+Rook::Rook(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):RoyalRider(name,fig,id,init_rank,init_file,bod_ptr){}
 
-Rook::~Rook(){
-}
+Rook::~Rook(){}
 
 bool Rook::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
 

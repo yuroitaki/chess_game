@@ -1,19 +1,16 @@
-
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "royal_infantry.h"
 
-RoyalInfantry::RoyalInfantry(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){
-}
+RoyalInfantry::RoyalInfantry(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){}
 
-RoyalInfantry::~RoyalInfantry(){
-
-}
+RoyalInfantry::~RoyalInfantry(){}
 
 bool RoyalInfantry::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){ 
-  if(!check_desti_friendly_fire(d_rank,d_file,desti)){
+  if(!check_desti_friendly_fire(d_rank,d_file,desti,source)){
     return false;
   }
   check_move_bound();
@@ -31,11 +28,6 @@ void RoyalInfantry::chess_rule(int* buff_rank_arr, int* buff_file_arr)
     possible_rank.push_back(buff_rank);
     possible_file.push_back(buff_file);
   }    
-  // for(unsigned i=0;i<possible_rank.size();i++){
-  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
-  // }
-  // cout << chess_id << endl;
-  // cout << endl;
 }
 
 void RoyalInfantry::build_possible_moves(){

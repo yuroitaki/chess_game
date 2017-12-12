@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "ChessPiece.h"
 #include "ChessBoard.h"
@@ -19,12 +20,11 @@ ChessPiece::ChessPiece(string name, string fig,string id,int init_rank, int init
   set_player();
 }
 
-ChessPiece::~ChessPiece(){
-}
+ChessPiece::~ChessPiece(){}
 
 bool ChessPiece::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
    
-  if(!check_desti_friendly_fire(d_rank,d_file,desti)){
+  if(!check_desti_friendly_fire(d_rank,d_file,desti,source)){
     return false;
   }
   check_move_bound();
@@ -40,17 +40,17 @@ bool ChessPiece::verify_desti(int d_rank,int d_file,const char* desti){
       return true;
     }
   }
-  cerr << chess_player << "'s " << chess_name << " cannot move to " << desti << "!"<<endl;
+  cout << chess_player << "'s " << chess_name << " cannot move to " << desti << "!"<<endl;
   return false;
 }
 
 
-bool ChessPiece::check_desti_friendly_fire(int d_rank,int d_file,const char* desti){
+bool ChessPiece::check_desti_friendly_fire(int d_rank,int d_file,const char* desti, const char* source){
 
   ChessPiece* buff_d_ptr = board_ptr[d_rank][d_file]; 
   if (buff_d_ptr!=NULL){
     if(buff_d_ptr->get_chess_player()==chess_player){
-      cerr << buff_d_ptr->get_chess_name() << " at " << desti << " is also " << chess_player << "'s!" << endl;
+      cout << chess_player << "'s " << chess_name << " cannot move from " << source << " to " << desti << " taking its "<< buff_d_ptr->get_chess_name() << endl;
       return false;
     }
   }return true;
@@ -72,11 +72,6 @@ void ChessPiece::check_friendly_fire(){
       }
     }count++;
   }
-  // for(unsigned i=0;i<possible_rank.size();i++){
-  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
-  // }
-  // cout << chess_id << endl;
-  // cout << endl;
 }
 
 void ChessPiece::check_move_bound(){
@@ -91,13 +86,11 @@ void ChessPiece::check_move_bound(){
       count--;
     }count++;
   }
-  // for(unsigned i=0;i<possible_rank.size();i++){
-  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
-  // }cout << endl << endl;
 }
 
-void::ChessPiece::build_possible_moves(){
+void ChessPiece::build_possible_moves(){
   check_move_bound();
+  check_friendly_fire();
 }
 
 

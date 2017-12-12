@@ -10,7 +10,7 @@ class Queen: public RoyalRider{
   Queen(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr);
   ~Queen();
   bool check_chess_move(const char* source, const char* desti,int d_rank,int d_file) override;
-  void build_possible_moves() override;;
+  void build_possible_moves() override;
 };
 
 #endif

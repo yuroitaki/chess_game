@@ -33,8 +33,8 @@ class ChessBoard{
   bool format_move(const char* source, const char* desti,int& s_rank,int& s_file, int& d_rank,int& d_file);
   void execute_move(int s_rank,int s_file, int d_rank,int d_file,const char* source,const char* desti);
   bool check_state(int d_rank,int d_file);
-  bool save_king(ChessPiece** def_ptr, ChessPiece** atk_ptr,int def_rank,int def_file);
-  bool check_mate(ChessPiece** atck_ptr,int def_rank,int def_file);
+  bool save_king(ChessPiece** def_ptr, ChessPiece** atk_ptr,int king_rank,int king_file);
+  bool check_mate(ChessPiece** atck_ptr,int king_rank,int king_file);
   bool check_life_stat(ChessPiece* test_piece);
   void print();
   bool check_source(int s_rank,int s_file,const char* source);

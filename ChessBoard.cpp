@@ -38,7 +38,7 @@ ChessBoard::ChessBoard(){
   create_chess_pieces('+');
   create_chess_pieces('-');
   initialize_board();
-  //print();
+  // print();
   cout << "A new chess game is started!" << endl;
 }
 
@@ -78,10 +78,10 @@ bool ChessBoard::submitMove(const char* source, const char* desti){
   execute_move(source_rank,source_file,desti_rank,desti_file,source,desti);
   
   if(check_state(desti_rank,desti_file)){
-    //print();
+    // print();
     return false;
   }
-  //print();
+  // print();
   return true;
 }
 
@@ -102,26 +102,30 @@ bool ChessBoard::check_state(int d_rank,int d_file){
     def_ptr = white_chess_ptr;
     def_name = "White";
   }
-  int def_rank = def_ptr[KING_POS]->get_curr_rank();
-  int def_file = def_ptr[KING_POS]->get_curr_file();
+  int king_rank = def_ptr[KING_POS]->get_curr_rank();
+  int king_file = def_ptr[KING_POS]->get_curr_file();
   
-  if(check_mate(atk_ptr,def_rank,def_file)){
-    if(save_king(def_ptr,atk_ptr,def_rank,def_file)){
+  if(check_mate(atk_ptr,king_rank,king_file)){
+    if(save_king(def_ptr,atk_ptr,king_rank,king_file)){
       cout << def_name << " is in check" <<endl;
       return false;
     }
     cout << def_name << " is in checkmate" << endl;
     return true;
   }
+  if(!save_king(def_ptr,atk_ptr,king_rank,king_file)){
+    cout << def_name << " is in stalemate" << endl;
+    return true;
+  }
   return false;
 }
 
-bool ChessBoard::save_king(ChessPiece** def_ptr, ChessPiece** atk_ptr,int def_rank,int def_file){
+bool ChessBoard::save_king(ChessPiece** def_ptr, ChessPiece** atk_ptr,int king_rank,int king_file){
   vector<int>* def_rvec;
   vector<int>* def_fvec;
   int count = 0;
-  int ori_king_rank = def_rank;
-  int ori_king_file = def_file;
+  int ori_king_rank = king_rank;
+  int ori_king_file = king_file;
   
   while(count<CHESS_PIECE_NO){
     if(check_life_stat(def_ptr[count])){
@@ -134,48 +138,50 @@ bool ChessBoard::save_king(ChessPiece** def_ptr, ChessPiece** atk_ptr,int def_ra
 
 	int buff_rank = (*def_rvec)[j];
 	int buff_file = (*def_fvec)[j];
-	ChessPiece* buff_ptr = board_ptr[buff_rank][buff_file];
-	
+	int source_rank = def_ptr[count]->get_curr_rank();
+	int source_file = def_ptr[count]->get_curr_file();
+    	ChessPiece* ori_desti_ptr = board_ptr[buff_rank][buff_file];
+
+	board_ptr[source_rank][source_file] = NULL;
 	board_ptr[buff_rank][buff_file] = def_ptr[count];
 
 	if(count == KING_POS){
-	  def_rank = buff_rank;
-	  def_file = buff_file;
+	  king_rank = buff_rank;
+	  king_file = buff_file;
 	}
 	else{
-	  def_rank = ori_king_rank;
-	  def_file = ori_king_file;
+	  king_rank = ori_king_rank;
+	  king_file = ori_king_file;
 	}
-	
-	if(!check_mate(atk_ptr,def_rank,def_file)){
-	  // cout << endl << endl;
-	  // cout<< def_ptr[count]->get_curr_rank() <<" " << def_ptr[count]->get_curr_file() <<" " << *(def_ptr[count])<< " "<< buff_rank << " " << buff_file << endl;
+	if(!check_mate(atk_ptr,king_rank,king_file)){
+	  
 	  def_ptr[count]->clear_vector();
-	  board_ptr[buff_rank][buff_file] = buff_ptr;
-	  return true;
+	  board_ptr[source_rank][source_file] = def_ptr[count];
+	  board_ptr[buff_rank][buff_file] = ori_desti_ptr;
+       	  return true;
 	}
-	board_ptr[buff_rank][buff_file] = buff_ptr;
+	board_ptr[source_rank][source_file] = def_ptr[count];
+	board_ptr[buff_rank][buff_file] = ori_desti_ptr;
       }def_ptr[count]->clear_vector();
     }count++;
   }return false;
 }
 
-bool ChessBoard::check_mate(ChessPiece** atck_ptr,int def_rank,int def_file){
+bool ChessBoard::check_mate(ChessPiece** atck_ptr,int king_rank,int king_file){
 
-  vector<int>* atck_rank;
-  vector<int>* atck_file;
+  vector<int>* atck_rvec;
+  vector<int>* atck_fvec;
   int count = 0;
   
   while(count<CHESS_PIECE_NO){
     if(check_life_stat(atck_ptr[count])){
       
       atck_ptr[count]->build_possible_moves();
-      atck_rank = atck_ptr[count]->get_rank_vec();
-      atck_file = atck_ptr[count]->get_file_vec();
+      atck_rvec = atck_ptr[count]->get_rank_vec();
+      atck_fvec = atck_ptr[count]->get_file_vec();
     
-      for(unsigned j=0; j<(atck_rank->size());j++){
-	if((def_rank == (*atck_rank)[j])&&(def_file == (*atck_file)[j])){
-	  // cout<< atck_ptr[count]->get_curr_rank() <<" " << atck_ptr[count]->get_curr_file() << " " << *(atck_ptr[count]) <<endl;
+      for(unsigned j=0; j<(atck_rvec->size());j++){
+	if((king_rank == (*atck_rvec)[j])&&(king_file == (*atck_fvec)[j])){
 	  atck_ptr[count]->clear_vector();
 	  return true;
 	}
@@ -200,18 +206,18 @@ bool ChessBoard::check_life_stat(ChessPiece* test_piece){
 bool ChessBoard::check_source(int s_rank,int s_file,const char* source){
 
   if(board_ptr[s_rank][s_file]==NULL){
-    cerr << "There is no piece at position " << source <<"!" << endl;
+    cout << "There is no piece at position " << source <<"!" << endl;
     return false;
   }
   if(turn_count%2==0){
     if((board_ptr[s_rank][s_file]->get_chess_player())=="White"){
-      cerr << "It is not White's turn to move!" << endl;
+      cout << "It is not White's turn to move!" << endl;
       return false;
     }
   }
   if(turn_count%2==1){
     if((board_ptr[s_rank][s_file]->get_chess_player())=="Black"){
-      cerr << "It is not Black's turn to move!" << endl;
+      cout << "It is not Black's turn to move!" << endl;
       return false;
     }
   }

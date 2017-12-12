@@ -1,19 +1,17 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <cstring>
 
 #include "royal_rider.h"
 
-RoyalRider::RoyalRider(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){
-}
+RoyalRider::RoyalRider(string name,string fig,string id,int init_rank,int init_file,ChessPiece*** bod_ptr):ChessPiece(name,fig,id,init_rank,init_file,bod_ptr){}
 
-RoyalRider::~RoyalRider(){
- 
-}
+RoyalRider::~RoyalRider(){}
 
 bool RoyalRider::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
   
-  if(!check_desti_friendly_fire(d_rank,d_file,desti)){
+  if(!check_desti_friendly_fire(d_rank,d_file,desti,source)){
     return false;
   }
   check_friendly_fire();
@@ -38,12 +36,14 @@ void RoyalRider::chess_rule(vector<int>& rank_vec, vector<int>& file_vec){
     if(check_rule_bound(leap_rank,leap_file)){
       if(board_ptr[leap_rank][leap_file]==NULL){
 	if(check_unwanted_index(index,unwanted_index)){
+	  
 	  buff_rank_vec.push_back(factor*rank_vec[index]);
 	  buff_file_vec.push_back(factor*file_vec[index]);
 	}
       }
       else{
 	if(check_unwanted_index(index,unwanted_index)){
+	  
 	  buff_rank_vec.push_back(factor*rank_vec[index]);
 	  buff_file_vec.push_back(factor*file_vec[index]);
 	  unwanted_index.push_back(index);
@@ -62,11 +62,6 @@ void RoyalRider::chess_rule(vector<int>& rank_vec, vector<int>& file_vec){
     possible_rank.push_back(buff_rank);
     possible_file.push_back(buff_file);
   }    
-  // for(unsigned i=0;i<possible_rank.size();i++){
-  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
-  // }
-  // cout << chess_id << endl;
-  // cout << endl;
 }
 
 bool RoyalRider::check_unwanted_index(int index, vector<int>& unwanted_index){
@@ -77,7 +72,6 @@ bool RoyalRider::check_unwanted_index(int index, vector<int>& unwanted_index){
   }
   return true;
 }
-
 
 void RoyalRider::build_possible_moves(){
   
