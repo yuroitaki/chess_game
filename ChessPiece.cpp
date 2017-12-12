@@ -23,12 +23,12 @@ ChessPiece::~ChessPiece(){
 }
 
 bool ChessPiece::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
-  
-  check_move_bound();
-  
-  if(!check_friendly_fire(d_rank,d_file,desti)){
+   
+  if(!check_desti_friendly_fire(d_rank,d_file,desti)){
     return false;
   }
+  check_move_bound();
+  check_friendly_fire();
   return true;
 }
 
@@ -45,7 +45,7 @@ bool ChessPiece::verify_desti(int d_rank,int d_file,const char* desti){
 }
 
 
-bool ChessPiece::check_friendly_fire(int d_rank,int d_file,const char* desti){
+bool ChessPiece::check_desti_friendly_fire(int d_rank,int d_file,const char* desti){
 
   ChessPiece* buff_d_ptr = board_ptr[d_rank][d_file]; 
   if (buff_d_ptr!=NULL){
@@ -53,7 +53,10 @@ bool ChessPiece::check_friendly_fire(int d_rank,int d_file,const char* desti){
       cerr << buff_d_ptr->get_chess_name() << " at " << desti << " is also " << chess_player << "'s!" << endl;
       return false;
     }
-  }
+  }return true;
+}
+
+void ChessPiece::check_friendly_fire(){
   int count = 0;
   while (count < possible_rank.size()){
     
@@ -69,11 +72,11 @@ bool ChessPiece::check_friendly_fire(int d_rank,int d_file,const char* desti){
       }
     }count++;
   }
-  for(unsigned i=0;i<possible_rank.size();i++){
-    cout << possible_rank[i] << " " << possible_file[i] << endl;
-  }cout << endl;
-  
-  return true;
+  // for(unsigned i=0;i<possible_rank.size();i++){
+  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
+  // }
+  // cout << chess_id << endl;
+  // cout << endl;
 }
 
 void ChessPiece::check_move_bound(){
@@ -88,10 +91,15 @@ void ChessPiece::check_move_bound(){
       count--;
     }count++;
   }
-  for(unsigned i=0;i<possible_rank.size();i++){
-    cout << possible_rank[i] << " " << possible_file[i] << endl;
-  }cout << endl << endl;
+  // for(unsigned i=0;i<possible_rank.size();i++){
+  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
+  // }cout << endl << endl;
 }
+
+void::ChessPiece::build_possible_moves(){
+  check_move_bound();
+}
+
 
 bool ChessPiece::check_rule_bound(int rank, int file){
   
@@ -100,7 +108,8 @@ bool ChessPiece::check_rule_bound(int rank, int file){
   }
   if((file<1)||(file>8)){
     return false;
-  }return true; 
+  }
+  return true; 
 }
 
 ostream& operator<<(ostream& out, const ChessPiece& cp){
@@ -113,6 +122,29 @@ int ChessPiece::get_init_rank(){
 
 int ChessPiece::get_init_file(){
   return initial_file;
+}
+
+
+int ChessPiece::get_curr_rank(){
+  return current_rank;
+}
+
+int ChessPiece::get_curr_file(){
+  return current_file;
+}
+
+vector<int>* ChessPiece::get_rank_vec(){
+  
+  vector<int>* rank_ptr;
+  rank_ptr = &possible_rank;
+  return rank_ptr;
+}
+
+vector<int>* ChessPiece::get_file_vec(){
+
+  vector<int>* file_ptr;
+  file_ptr = &possible_file;
+  return file_ptr;
 }
 
 string ChessPiece::get_chess_player(){

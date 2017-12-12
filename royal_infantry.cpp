@@ -11,13 +11,12 @@ RoyalInfantry::~RoyalInfantry(){
   cout << "Royal Infantry is deleted!" << " ";
 }
 
-bool RoyalInfantry::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){
-
-  check_move_bound();
-  
-  if(!check_friendly_fire(d_rank,d_file,desti)){
+bool RoyalInfantry::check_chess_move(const char* source, const char* desti,int d_rank,int d_file){ 
+  if(!check_desti_friendly_fire(d_rank,d_file,desti)){
     return false;
   }
+  check_move_bound();
+  check_friendly_fire();
   return true;
 }
 
@@ -31,8 +30,16 @@ void RoyalInfantry::chess_rule(int* buff_rank_arr, int* buff_file_arr)
     possible_rank.push_back(buff_rank);
     possible_file.push_back(buff_file);
   }    
-  for(unsigned i=0;i<possible_rank.size();i++){
-    cout << possible_rank[i] << " " << possible_file[i] << endl;
-  }cout << endl;
+  // for(unsigned i=0;i<possible_rank.size();i++){
+  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
+  // }
+  // cout << chess_id << endl;
+  // cout << endl;
+}
+
+void RoyalInfantry::build_possible_moves(){
+
+  check_move_bound();
+  check_friendly_fire();
 }
 

@@ -78,7 +78,17 @@ void Pawn::chess_rule(){
     possible_rank.push_back(buff_rank);
     possible_file.push_back(buff_file);
   }    
-  for(unsigned i=0;i<possible_rank.size();i++){
-    cout << possible_rank[i] << " " << possible_file[i] << endl;
-  }cout << endl; 
+  // for(unsigned i=0;i<possible_rank.size();i++){
+  //   cout << possible_rank[i] << " " << possible_file[i] << endl;
+  // }cout << chess_id << endl;
+  // cout << endl; 
 }
+
+void Pawn::build_possible_moves(){
+  
+  chess_rule();
+  check_move_bound();
+  check_friendly_fire();
+
+}
+

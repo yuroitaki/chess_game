@@ -32,3 +32,14 @@ bool Queen::check_chess_move(const char* source, const char* desti,int d_rank,in
   possible_file.clear();
   return true;
 }
+
+
+void Queen::build_possible_moves(){
+  
+  vector<int> rank_move = {1,-1,1,-1,1,0,0,-1};
+  vector<int> file_move = {1,1,-1,-1,0,1,-1,0};
+
+  chess_rule(rank_move,file_move);
+
+  RoyalRider::build_possible_moves();
+}

@@ -36,3 +36,14 @@ bool King::check_chess_move(const char* source, const char* desti,int d_rank,int
   return true;
 }
 
+void King::build_possible_moves(){
+  
+  int len_arr = 8;
+  int buff_rank_arr[len_arr] = {-1,0,1,-1,0,1,-1,1};
+  int buff_file_arr[len_arr] = {-1,-1,-1,1,1,1,0,0};
+  int* rank_ptr = buff_rank_arr;
+  int* file_ptr = buff_file_arr;
+  
+  chess_rule(rank_ptr,file_ptr);
+  RoyalInfantry::build_possible_moves();
+}

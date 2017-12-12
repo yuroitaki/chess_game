@@ -12,6 +12,7 @@ class RoyalRider: public ChessPiece{
   bool check_chess_move(const char* source, const char* desti,int d_rank,int d_file);
   void chess_rule(vector<int>& rank_vec, vector<int>& file_vec);
   bool check_unwanted_index(int index, vector<int>& unwanted_index);
+  virtual void build_possible_moves();
 };
 
 #endif

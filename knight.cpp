@@ -35,3 +35,16 @@ bool Knight::check_chess_move(const char* source, const char* desti,int d_rank,i
   possible_file.clear();
   return true;
 }
+
+
+void Knight::build_possible_moves(){
+  
+  int len_arr = 8;
+  int buff_rank_arr[len_arr] = {-2,-1,1,2,-2,-1,1,2};
+  int buff_file_arr[len_arr] = {-1,-2,-2,-1,1,2,2,1};
+  int* rank_ptr = buff_rank_arr;
+  int* file_ptr = buff_file_arr;
+  
+  chess_rule(rank_ptr,file_ptr);
+  RoyalInfantry::build_possible_moves();
+}

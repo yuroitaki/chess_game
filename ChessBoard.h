@@ -1,6 +1,9 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
+#define DEAD 0
+#define ALIVE 1
+#define KING_POS 4
 #define RANK_SIZE 8
 #define FILE_SIZE 8
 #define CHESS_PIECE_NO 16
@@ -31,6 +34,9 @@ class ChessBoard{
   bool submitMove(const char* source,const char* desti);
   bool format_move(const char* source, const char* desti,int& s_rank,int& s_file, int& d_rank,int& d_file);
   void execute_move(int s_rank,int s_file, int d_rank,int d_file,const char* source,const char* desti);
+  bool check_state(int d_rank,int d_file);
+  bool check_mate(ChessPiece** atck_ptr,int def_rank,int def_file);
+  bool check_life_stat(ChessPiece* test_piece);
   void print();
   bool check_source(int s_rank,int s_file,const char* source);
   void create_chess_pieces(char id);

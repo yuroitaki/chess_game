@@ -76,7 +76,71 @@ bool ChessBoard::submitMove(const char* source, const char* desti){
     return false;
   }
   execute_move(source_rank,source_file,desti_rank,desti_file,source,desti);
+  
+  if(check_state(desti_rank,desti_file)){
+    print();
+    return false;
+  }
   print();
+  return true;
+}
+
+
+bool ChessBoard::check_state(int d_rank,int d_file){
+
+  string player_name = board_ptr[d_rank][d_file]->get_chess_player();
+  ChessPiece** att_ptr;
+  ChessPiece** opp_ptr;
+  if(player_name=="White"){
+    att_ptr = white_chess_ptr;
+    opp_ptr = black_chess_ptr;
+  }
+  if (player_name == "Black"){
+    att_ptr = black_chess_ptr;
+    opp_ptr = white_chess_ptr;
+  }
+  int def_rank = opp_ptr[KING_POS]->get_curr_rank();
+  int def_file = opp_ptr[KING_POS]->get_curr_file();
+  
+  check_mate(att_ptr,def_rank,def_file);
+  
+  return true;
+}
+
+bool ChessBoard::check_mate(ChessPiece** atck_ptr,int def_rank,int def_file){
+
+  vector<int>* atck_rank;
+  vector<int>* atck_file;
+  int count = 0;
+  
+  while(count<CHESS_PIECE_NO){
+    if(check_life_stat(atck_ptr[count])){
+      
+      atck_ptr[count]->build_possible_moves();
+      atck_rank = atck_ptr[count]->get_rank_vec();
+      atck_file = atck_ptr[count]->get_file_vec();
+    
+      for(unsigned j=0; j<(atck_rank->size());j++){
+	if((def_rank == (*atck_rank)[j])&&(def_file == (*atck_file)[j])){
+	  
+	  cout << *(atck_ptr[count]) << endl;
+	  atck_ptr[count]->clear_vector();
+	  return true;
+	}
+      }
+      atck_ptr[count]->clear_vector();
+    }
+    count++;
+  }
+  return false;
+}
+
+bool ChessBoard::check_life_stat(ChessPiece* test_piece){
+
+  for(unsigned i=0;i<captured_vec.size();i++){
+    if(test_piece==captured_vec[i])
+      return false;
+  }
   return true;
 }
 
@@ -117,7 +181,7 @@ void ChessBoard::execute_move(int s_rank,int s_file, int d_rank,int d_file,const
   }
   else{ 
     cout << buff_source->get_chess_player() << "'s " << buff_source->get_chess_name() << " moves from " << source << " to " << desti << " taking " << buff_desti->get_chess_player() << "'s "<< buff_desti->get_chess_name() << endl;
-    
+
     captured_vec.push_back(board_ptr[d_rank][d_file]);
     buff_source->set_position(d_rank,d_file);
     board_ptr[d_rank][d_file] = board_ptr[s_rank][s_file];

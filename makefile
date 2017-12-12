@@ -1,4 +1,4 @@
-OBJ = ChessMain.o ChessBoard.o ChessPiece.o royal_infantry.o royal_rider.o king.o rook.o knight.o bishop.o queen.o pawn.o
+OBJ = ChessMain_alt.o ChessBoard.o ChessPiece.o royal_infantry.o royal_rider.o king.o rook.o knight.o bishop.o queen.o pawn.o
 EXE = chess
 CXX = g++
 CXXFLAGS = -Wall -g -std=c++11
@@ -9,7 +9,7 @@ $(EXE): $(OBJ)
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $<
 
-ChessMain.o: ChessBoard.h
+ChessMain_alt.o: ChessBoard.h
 
 ChessBoard.o: ChessBoard.h
 

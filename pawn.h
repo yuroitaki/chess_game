@@ -11,6 +11,7 @@ class Pawn: public ChessPiece{
   ~Pawn();
   bool check_chess_move(const char* source, const char* desti,int d_rank,int d_file) override;
   void chess_rule();
+  void build_possible_moves();
 };
 
 #endif

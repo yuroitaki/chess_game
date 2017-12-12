@@ -34,3 +34,12 @@ bool Bishop::check_chess_move(const char* source, const char* desti,int d_rank,i
   return true;
 }
 
+void Bishop::build_possible_moves(){
+  
+  vector<int> rank_move = {1,-1,1,-1};
+  vector<int> file_move = {1,1,-1,-1};
+  
+  chess_rule(rank_move,file_move);
+
+  RoyalRider::build_possible_moves();
+}
